@@ -16,8 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                 <strong>${entry.date}</strong>
                 <p>${entry.content.substring(0, 50)}${entry.content.length > 50 ? '...' : ''}</p>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
             `;
-            li.addEventListener('click', () => showFullEntry(index));
+            li.querySelector('.edit-btn').addEventListener('click', () => showEditEntry(index));
+            li.querySelector('.delete-btn').addEventListener('click', () => deleteEntry(index));
             entriesList.appendChild(li);
         });
     }
@@ -28,7 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(`Date: ${entry.date}\n\n${entry.content}`);
     }
 
-    // Save new entry
+    // Show edit entry form
+    function showEditEntry(index) {
+        const entry = entries[index];
+        entryDate.value = entry.date;
+        entryContent.value = entry.content;
+        saveEntryBtn.textContent = 'Update Entry';
+        saveEntryBtn.dataset.index = index;
+    }
+
+    // Update entry
     saveEntryBtn.addEventListener('click', () => {
         const date = entryDate.value;
         const content = entryContent.value.trim();
@@ -38,14 +50,31 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        entries.push({ date, content });
+        const index = saveEntryBtn.dataset.index;
+        if (index) {
+            entries[index] = { date, content };
+        } else {
+            entries.push({ date, content });
+        }
+
         localStorage.setItem('diaryEntries', JSON.stringify(entries));
 
         entryDate.value = '';
         entryContent.value = '';
+        saveEntryBtn.textContent = 'Save Entry';
+        saveEntryBtn.removeAttribute('data-index');
 
         displayEntries();
     });
+
+    // Delete entry
+    function deleteEntry(index) {
+        if (confirm('Are you sure you want to delete this entry?')) {
+            entries.splice(index, 1);
+            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+            displayEntries();
+        }
+    }
 
     // Set default date to today
     const today = new Date().toISOString().split('T')[0];
