@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Diary</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Personal Diary</h1>
+        <div class="entry-form">
+            <input type="date" id="entryDate" required>
+            <textarea id="entryContent" placeholder="Write your diary entry here..." required></textarea>
+            <button id="saveEntry">Save Entry</button>
+        </div>
+        <div class="entries-list">
+            <h2>Previous Entries</h2>
+            <ul id="entriesList"></ul>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
